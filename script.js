@@ -8,30 +8,29 @@ let editIndex = -1;
 
 render();
 
-form.addEventListener("submit", function(e){
+function updateSupplierSuggestions() {
 
-    e.preventDefault();
+    const supplierList = document.getElementById("supplierList");
 
-    const bill = {
-        id: editIndex === -1 ? Date.now() : bills[editIndex].id,
-        invoice: document.getElementById("invoice").value,
-        supplier: document.getElementById("supplier").value,
-        date: document.getElementById("date").value,
-        amount: parseFloat(document.getElementById("amount").value),
-        status: document.getElementById("status").value
-    };
+    supplierList.innerHTML = "";
 
-    if(editIndex === -1){
-        bills.push(bill);
-    }else{
-        bills[editIndex] = bill;
-        editIndex = -1;
-    }
+    // Get unique supplier names
+    const uniqueSuppliers = [...new Set(bills.map(bill => bill.supplier.trim()))];
 
-    saveData();
-    form.reset();
+    // Sort alphabetically
+    uniqueSuppliers.sort();
 
-});
+    uniqueSuppliers.forEach(name => {
+
+        const option = document.createElement("option");
+
+        option.value = name;
+
+        supplierList.appendChild(option);
+
+    });
+
+}
 
 function saveData(){
 
@@ -128,6 +127,8 @@ function render(filter=""){
     document.getElementById("paidBills").innerText=paidBills;
 
     document.getElementById("pendingBills").innerText=pendingBills;
+    
+    updateSupplierSuggestions();
 
 }
 
