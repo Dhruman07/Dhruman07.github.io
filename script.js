@@ -8,6 +8,31 @@ let editIndex = -1;
 
 render();
 
+form.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const bill = {
+        id: editIndex === -1 ? Date.now() : bills[editIndex].id,
+        invoice: document.getElementById("invoice").value,
+        supplier: document.getElementById("supplier").value,
+        date: document.getElementById("date").value,
+        amount: parseFloat(document.getElementById("amount").value),
+        status: document.getElementById("status").value
+    };
+
+    if(editIndex === -1){
+        bills.push(bill);
+    } else {
+        bills[editIndex] = bill;
+        editIndex = -1;
+    }
+
+    saveData();
+    form.reset();
+
+});
+
 function updateSupplierSuggestions() {
 
     const supplierList = document.getElementById("supplierList");
